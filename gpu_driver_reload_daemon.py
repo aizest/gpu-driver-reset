@@ -15,7 +15,7 @@ def check_gpu_driver():
             # print('Trying to reset GPU driver...')
             logging.info('Trying to reset GPU driver...')
             output_reset, err_reset = subprocess.Popen("reset-gpu.sh", shell=True, stdout=subprocess.PIPE,
-                                                       stderr=subprocess.PIPE)
+                                                       stderr=subprocess.PIPE).communicate()
             if output_reset:
                 # print('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
                 logging.info('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
@@ -31,7 +31,7 @@ def check_gpu_driver():
         if 'version mismatch' in err_msg:
             # print('Trying to reset GPU driver...')
             logging.info('Trying to reset GPU driver...')
-            output_reset, err_reset = subprocess.Popen("reset-gpu.sh", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output_reset, err_reset = subprocess.Popen("reset-gpu.sh", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
             if output_reset:
                 # print('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
                 logging.info('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
