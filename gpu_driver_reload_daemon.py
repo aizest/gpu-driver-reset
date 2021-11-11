@@ -5,6 +5,9 @@ import logging
 logging.basicConfig(level=logging.INFO, filename='reset-gpu.log', format='%(asctime)s - %(levelname)s - %(message)s')
 logging.info("server started!")
 
+## Need to add 2 lines to docker_start_gpu.sh
+#### export PATH=$PATH:$(pwd)
+#### sudo -E env "PATH=$PATH" python3 gpu_driver_reload_daemon.py &
 
 def check_gpu_driver():
     result = subprocess.Popen("nvidia-smi", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -13,7 +16,7 @@ def check_gpu_driver():
         out_msg = output.decode("utf-8")
         if 'version mismatch' in out_msg:
             # print('Trying to reset GPU driver...')
-            logging.info('Trying to reset GPU driver...')
+            logging.info('Identified there was a GPU driver upgrade! Trying to reset GPU driver now...')
             output_reset, err_reset = subprocess.Popen("sudo ./reset-gpu.sh", shell=True, stdout=subprocess.PIPE,
                                                        stderr=subprocess.PIPE).communicate()
             if output_reset:
