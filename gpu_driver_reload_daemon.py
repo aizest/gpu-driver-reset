@@ -10,8 +10,20 @@ def check_gpu_driver():
     result = subprocess.Popen("nvidia-smi", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, err = result.communicate()
     if output:
-        # print('GPU driver runs properly! No need to do anything.\n' + output.decode("utf-8"))
-        logging.info('GPU driver runs properly! No need to do anything.')
+        out_msg = output.decode("utf-8")
+        if 'version mismatch' in out_msg:
+            # print('Trying to reset GPU driver...')
+            logging.info('Trying to reset GPU driver...')
+            output_reset, err_reset = subprocess.Popen("reset-gpu.sh", shell=True, stdout=subprocess.PIPE,
+                                                       stderr=subprocess.PIPE)
+            if output_reset:
+                # print('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
+                logging.info('GPU driver reset was successful!\n' + output_reset.decode('utf-8'))
+            else:
+                # print('Failed to reset GPU driver. \n' + err_reset.decode('utf-8'))
+                logging.error('Failed to reset GPU driver. \n' + err_reset.decode('utf-8'))
+        else:
+            logging.info('GPU driver runs properly! No need to do anything.')
     else:
         err_msg = err.decode("utf-8")
         # print('GPU driver fails!\n' + err_msg)
